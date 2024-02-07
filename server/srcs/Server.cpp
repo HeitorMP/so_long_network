@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:32:59 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/07 00:18:56 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/07 00:23:44 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 Server::Server()
 {
-    _playfield.append("1111111111\n");
+    _playfield.append("1111111111\n"); //y * line lenght + x
     _playfield.append("1000000001\n");
     _playfield.append("1000000001\n");
     _playfield.append("1111111111\n");
