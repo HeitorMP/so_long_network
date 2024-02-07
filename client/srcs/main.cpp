@@ -1,71 +1,62 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/06 09:47:51 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/07 00:13:40 by hmaciel-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+// /* ************************************************************************** */
+// /*                                                                            */
+// /*                                                        :::      ::::::::   */
+// /*   main.cpp                                           :+:      :+:    :+:   */
+// /*                                                    +:+ +:+         +:+     */
+// /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
+// /*                                                +#+#+#+#+#+   +#+           */
+// /*   Created: 2024/02/06 09:47:51 by hmaciel-          #+#    #+#             */
+// /*   Updated: 2024/02/07 01:42:26 by hmaciel-         ###   ########.fr       */
+// /*                                                                            */
+// /* ************************************************************************** */
 
-#include "so_long_client.hpp"
+#include "../includes/so_long_client.hpp"
 
-const int PORT = 3000;
-const char* SERVER_IP = "127.0.0.1"; // Endereço IP do servidor
+int main()
+{
+	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::CircleShape shape(100.f);
+    shape.setFillColor(sf::Color::Green);
 
-int main() {
-    // Criar socket
-    int client_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (client_fd == -1) {
-        std::cerr << "Erro ao criar socket" << std::endl;
-        return 1;
-    }
+	sf::TcpSocket socket;
 
-    // Configurar endereço do servidor
-    sockaddr_in server_addr;
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(PORT);
-    inet_pton(AF_INET, SERVER_IP, &server_addr.sin_addr);
+	sf::Socket::Status status = socket.connect("127.0.0.1", 3000);
+	if (status != sf::Socket::Done)
+	{
+		std::cout << "error connecting to the server\n";
+		return 1;
+	}
+	socket.setBlocking(false);
 
-    // Conectar ao servidor
-    if (connect(client_fd, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr)) == -1) {
-        std::cerr << "Erro ao conectar ao servidor" << std::endl;
-        close(client_fd);
-        return 1;
-    }
+	char data[100];
+	std::size_t received;
+	if (socket.receive(data, 100, received) != sf::Socket::Done)
+	{
+		std::cout << "erro recebendo dados\n";
+	}
+	if (data[0] == 'F')
+	{
+		socket.disconnect();
+		return 1;
+	}
 
-    std::cout << "Conectado ao servidor. Digite 'sair' para encerrar a conexão." << std::endl;
+	std::string	message = "name=heitor x=1 y=2";
+	socket.send((char *)message.c_str(), message.size());
 
-    while (true) {
-        std::string message = "name=heitor x=3 y=4";
-        // Enviar mensagem para o servidor
-        if (send(client_fd, message.c_str(), message.size(), 0) == -1) {
-            std::cerr << "Erro ao enviar mensagem para o servidor" << std::endl;
-            close(client_fd);
-            return 1;
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
         }
-
-        // Receber resposta do servidor
-        char buffer[1024];
-        int bytes_received = recv(client_fd, buffer, sizeof(buffer), 0);
-        if (bytes_received == -1) {
-            std::cerr << "Erro ao receber resposta do servidor" << std::endl;
-            close(client_fd);
-            return 1;
-        } else if (bytes_received == 0) {
-            std::cout << "Conexão encerrada pelo servidor" << std::endl;
-            break;
-        }
-
-        // Exibir resposta do servidor
-        std::cout << "Resposta do servidor: " << std::string(buffer, bytes_received) << std::endl;
-        std::cout << buffer << std::endl;
+		if (socket.receive(data, 100, received) != sf::Socket::Done)
+		{
+			std::cout << "erro recebendo dados\n";
+		}
+        window.clear();
+        window.draw(shape);
+        window.display();
     }
-
-    // Fechar o socket
-    close(client_fd);
-
-    return 0;
 }
