@@ -51,12 +51,12 @@ ${OBJS_CLI}:		${OBJS_CLI_DIR}/%.o: ${SRC_CLI_DIR}/%.cpp
 server: ${SERVER_NAME}
 ${SERVER_NAME}:	${OBJS_SERV}
 				@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${SERVER_NAME} ${CLR_RMV}..."
-				${CPP} ${OBJS_SERV} ${SFMLFLAGS} ${FLAGS} -o ${SERVER_NAME}
+				${CPP} ${OBJS_SERV} ${FLAGS} -o ${SERVER_NAME}
 				@echo "${GREEN}${SERVER_NAME} server created[0m 🎮 ✔️"
 
 ${OBJS_SERV}:	${OBJS_SERV_DIR}/%.o: ${SRC_SERV_DIR}/%.cpp
 				@mkdir -p $(@D)
-				${CPP} -I${INC_SERV_DIR} ${SFMLFLAGS} ${FLAGS} -O3 -c $< -o $@
+				${CPP} -I${INC_SERV_DIR} ${FLAGS} -O3 -c $< -o $@
 
 cclean:
 				@ ${RM} -rf ${OBJS_CLI_DIR}

@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 15:01:26 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/07 11:42:59 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:23:31 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 # include <iostream>
 # include <unistd.h>
-# include <SFML/Network.hpp>
 
 
 class Client {
     
     private:
+        int                 _fd;
         int                 _x;
         int                 _y;
         int                 _score;
@@ -27,7 +27,7 @@ class Client {
         std::string         _name;
 
     public:
-        Client(std::string, int, int);
+        Client(int, std::string, int, int);
         ~Client();
 
         /* GETTERS & SETTERS */
