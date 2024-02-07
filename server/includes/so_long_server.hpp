@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:49:13 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/06 12:12:24 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/06 21:21:53 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,3 +19,4 @@
 # include <cstring>
 # include <netinet/in.h>
 # include <unistd.h>
+# include <signal.h>

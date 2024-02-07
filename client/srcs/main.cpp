@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:47:51 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/06 12:16:47 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/07 00:13:40 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,7 @@ int main() {
     std::cout << "Conectado ao servidor. Digite 'sair' para encerrar a conexão." << std::endl;
 
     while (true) {
-        std::string message;
-        std::cout << "Digite uma mensagem: ";
-        std::getline(std::cin, message);
-
-        // Verificar se o usuário deseja sair
-        if (message == "sair") {
-            break;
-        }
-
+        std::string message = "name=heitor x=3 y=4";
         // Enviar mensagem para o servidor
         if (send(client_fd, message.c_str(), message.size(), 0) == -1) {
             std::cerr << "Erro ao enviar mensagem para o servidor" << std::endl;
@@ -69,6 +61,7 @@ int main() {
 
         // Exibir resposta do servidor
         std::cout << "Resposta do servidor: " << std::string(buffer, bytes_received) << std::endl;
+        std::cout << buffer << std::endl;
     }
 
     // Fechar o socket

@@ -2,7 +2,7 @@
 
 # SYSTEM
 CC				:= c++
-FLAGS			:= -Wall -Wextra -Werror -Wno-unused-result -g -fsanitize=address
+FLAGS			:= -Wall -Wextra -Werror -Wno-unused-result -g #-fsanitize=address
 RM				:= rm -f
 
 #CLIENT
@@ -17,7 +17,7 @@ SERVER_NAME		:= so_long_server
 SRC_SERV_DIR	:= server/srcs
 INC_SERV_DIR	:= ./server/includes
 OBJS_SERV_DIR	:= server/objs
-SRCS_SERV		:= main.cpp Server.cpp
+SRCS_SERV		:= main.cpp Server.cpp Client.cpp
 
 # GFX
 MLXFLAGS		:= -lmlx -lXext -lX11 -lm -lz -lbsd
