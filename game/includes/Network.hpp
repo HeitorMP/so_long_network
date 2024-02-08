@@ -6,13 +6,16 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:40:53 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/08 22:01:31 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/08 22:22:49 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-# include "so_long.hpp"
+#include <iostream>
+# include <SFML/Graphics.hpp>
+# include <SFML/Network.hpp>
+
 
 class Network
 {
