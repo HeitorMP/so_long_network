@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:22:34 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/08 22:11:24 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/08 23:06:16 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,33 @@ int main(int argc, char const *argv[])
         loadCounter.y++;
     }
     
-    sf::RectangleShape rect1, rect2;
+    sf::Sprite sprite1;
+    sf::Texture texture1;
+    sf::Sprite sprite2;
+    sf::Texture texture2;
 
-    rect1.setSize(sf::Vector2f(20,20));
-    rect2.setSize(sf::Vector2f(20,20));
+    if (mode == "-s")
+    {
+        texture1.loadFromFile("assets/p1.png", sf::IntRect(0, 0, 32, 32));
+        sprite1.setTexture(texture1);
+        texture2.loadFromFile("assets/p2.png", sf::IntRect(0, 0, 32, 32));
+        sprite2.setTexture(texture2);
+    }
+    else
+    {
+        texture1.loadFromFile("assets/p2.png", sf::IntRect(0, 0, 32, 32));
+        sprite1.setTexture(texture1);
+        texture2.loadFromFile("assets/p1.png", sf::IntRect(0, 0, 32, 32));
+        sprite2.setTexture(texture2);
+    }
 
-    rect1.setFillColor(sf::Color::Red);
-    rect2.setFillColor(sf::Color::Blue);
+    // sf::RectangleShape rect1, rect2;
+
+    // rect1.setSize(sf::Vector2f(20,20));
+    // rect2.setSize(sf::Vector2f(20,20));
+
+    // rect1.setFillColor(sf::Color::Red);
+    // rect2.setFillColor(sf::Color::Blue);
 
     sf::RenderWindow    Window(sf::VideoMode(800, 600, 32), "So Long Network");
     
@@ -119,32 +139,32 @@ int main(int argc, char const *argv[])
                 update = false;
         }
         
-        prevPosition = rect1.getPosition();
+        prevPosition = sprite1.getPosition();
 
         if (update) // move apenas para a janela em foco
         {            
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                rect1.move(0.1f, 0.0f);
+                sprite1.move(0.1f, 0.0f);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                rect1.move(-0.1f, 0.0f);
+                sprite1.move(-0.1f, 0.0f);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-                rect1.move(0.0f, 0.1f);
+                sprite1.move(0.0f, 0.1f);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-                rect1.move(0.0f, -0.1f);
+                sprite1.move(0.0f, -0.1f);
         }
 
         sf::Packet packet;
         
-        if (prevPosition != rect1.getPosition())
+        if (prevPosition != sprite1.getPosition())
         {
-            packet << rect1.getPosition().x << rect1.getPosition().y; // alimentando o pacote;
+            packet << sprite1.getPosition().x << sprite1.getPosition().y; // alimentando o pacote;
             net.socket.send(packet);
         }
 
         net.socket.receive(packet);
         if (packet >> p2Position.x >> p2Position.y)
         {
-            rect2.setPosition(p2Position);
+            sprite2.setPosition(p2Position);
         }
         
         Window.clear();
@@ -162,8 +182,8 @@ int main(int argc, char const *argv[])
             }
         }
 
-        Window.draw(rect1);
-        Window.draw(rect2);
+        Window.draw(sprite1);
+        Window.draw(sprite2);
         Window.display();
     }
 
