@@ -6,11 +6,11 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:22:34 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/08 18:49:22 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/08 19:12:02 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long_client.hpp"
+#include "so_long.hpp"
 #define PORT 3000
 
 int main(int argc, char const *argv[])
