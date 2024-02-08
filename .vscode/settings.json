@@ -49,6 +49,7 @@
         "sstream": "cpp",
         "mlx_int.h": "c",
         "cinttypes": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "fstream": "cpp"
     }
 }

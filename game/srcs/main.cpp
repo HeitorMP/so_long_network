@@ -6,47 +6,52 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:22:34 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/08 19:12:02 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/08 22:04:17 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.hpp"
-#define PORT 3000
+#include "Network.hpp"
+#include "Params.hpp"
 
 int main(int argc, char const *argv[])
 {
-    (void)argc;
-    (void)argv;
-    sf::IpAddress   ip = sf::IpAddress::getLocalAddress();
-    sf::TcpSocket   socket;
-    char    connectionType;
-    char    buffer[2000];
-    (void)buffer;
-    std::size_t received;
-    (void)received;
-    // std::string text = "Connected to: ";
-    // mode = 0;
 
-    std::cout << "Enter (s) for server, (c) for client: " << std::endl;
-    std::cin >> connectionType;
-
-    if (connectionType == 's')
+    if (argc < 3 && argc > 4)
     {
-        sf::TcpListener listener;
-        listener.listen(PORT);
-        listener.accept(socket);
-        // text += "Server";
-        // mode = 's';
+        std::cout << "usage for server: ./so_long -s PORT" << std::endl;
+        std::cout << "usage for client: ./so_long -c IP PORT" << std::endl;
+        std::cout << "./so_long -c 127.0.0.1 3000" << std::endl;
+        return 1;
     }
-    else if (connectionType == 'c')
+    
+    std::string mode = "";
+    std::string ip = "";
+    std::string port = "";
+    
+    if (argc == 4)
     {
-        socket.connect(ip, PORT); 
-        // text += "Client";
-        // mode = 'r';
+        if(Params::isGoodClient(argv[1], argv[2], argv[3]) == false)
+        {
+            std::cerr << "Bad params!" << std::endl;
+            return (1);
+        }
+        ip = argv[2];
+        port = argv[3];
     }
-    // socket.send(text.c_str(), text.length() + 1);
-
-    socket.setBlocking(false);
+    else
+    {
+       if(Params::isGoodServer(argv[1], argv[2]) == false)
+       {
+            std::cerr << "Bad params!" << std::endl; 
+            return (1);
+       }
+       port = argv[2];
+    }
+    mode = argv[1];
+   
+    Network net(mode, ip, stoi(port));
+    net.start();
 
     bool update = false;
 
@@ -85,12 +90,9 @@ int main(int argc, char const *argv[])
             }
             else
                 loadCounter.x++;
-            std::cout << loadCounter.x << "-" << loadCounter.y << std::endl;
         }
         loadCounter.y++;
     }
-
-    std::cout << "counter x: " << loadCounter.x << " counter y: " << loadCounter.y << std::endl;
     
     sf::RectangleShape rect1, rect2;
 
@@ -100,7 +102,7 @@ int main(int argc, char const *argv[])
     rect1.setFillColor(sf::Color::Red);
     rect2.setFillColor(sf::Color::Blue);
 
-    sf::RenderWindow    Window(sf::VideoMode(800, 600, 32), "So Long");
+    sf::RenderWindow    Window(sf::VideoMode(800, 600, 32), "So Long Network");
     
     sf::Vector2f prevPosition, p2Position;
 
@@ -136,10 +138,10 @@ int main(int argc, char const *argv[])
         if (prevPosition != rect1.getPosition())
         {
             packet << rect1.getPosition().x << rect1.getPosition().y; // alimentando o pacote;
-            socket.send(packet);
+            net.socket.send(packet);
         }
 
-        socket.receive(packet);
+        net.socket.receive(packet);
         if (packet >> p2Position.x >> p2Position.y)
         {
             rect2.setPosition(p2Position);
@@ -151,7 +153,6 @@ int main(int argc, char const *argv[])
         {
             for (int line = 0; line < loadCounter.y; line++)
             {
-                //std::cout << "cord x: " << playfield[col][line].x << " - Cord: y: " << playfield[col][line].y << std::endl;
                 if (playfield[col][line].x != -1 && playfield[col][line].y != -1)
                 {
                     tiles.setPosition(col * 32, line * 32);
