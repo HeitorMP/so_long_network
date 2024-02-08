@@ -13,17 +13,17 @@ OBJS_CLI_DIR	:= client/objs
 SRCS_CLI		:= main.cpp
 
 #SERVER
-SERVER_NAME		:= so_long_server
-SRC_SERV_DIR	:= server/srcs
-INC_SERV_DIR	:= server/includes
-OBJS_SERV_DIR	:= server/objs
-SRCS_SERV		:= main.cpp Server.cpp Client.cpp
+# SERVER_NAME		:= so_long_server
+# SRC_SERV_DIR	:= server/srcs
+# INC_SERV_DIR	:= server/includes
+# OBJS_SERV_DIR	:= server/objs
+# SRCS_SERV		:= main.cpp Server.cpp Client.cpp
 
 # GFX
 SFMLFLAGS		:= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 
 OBJS_CLI		:= ${SRCS_CLI:%.cpp=${OBJS_CLI_DIR}/%.o}
-OBJS_SERV		:= ${SRCS_SERV:%.cpp=${OBJS_SERV_DIR}/%.o}
+# OBJS_SERV		:= ${SRCS_SERV:%.cpp=${OBJS_SERV_DIR}/%.o}
 
 # COLORS
 CLR_RMV			:= \033[0m
@@ -48,23 +48,23 @@ ${OBJS_CLI}:		${OBJS_CLI_DIR}/%.o: ${SRC_CLI_DIR}/%.cpp
 					${CPP} -I${INC_CLI_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
 
 
-server: ${SERVER_NAME}
-${SERVER_NAME}:	${OBJS_SERV}
-				@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${SERVER_NAME} ${CLR_RMV}..."
-				${CPP} ${OBJS_SERV} ${FLAGS} -o ${SERVER_NAME}
-				@echo "${GREEN}${SERVER_NAME} server created[0m 🎮 ✔️"
+# server: ${SERVER_NAME}
+# ${SERVER_NAME}:	${OBJS_SERV}
+# 				@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${SERVER_NAME} ${CLR_RMV}..."
+# 				${CPP} ${OBJS_SERV} ${FLAGS} -o ${SERVER_NAME}
+# 				@echo "${GREEN}${SERVER_NAME} server created[0m 🎮 ✔️"
 
-${OBJS_SERV}:	${OBJS_SERV_DIR}/%.o: ${SRC_SERV_DIR}/%.cpp
-				@mkdir -p $(@D)
-				${CPP} -I${INC_SERV_DIR} ${FLAGS} -O3 -c $< -o $@
+# ${OBJS_SERV}:	${OBJS_SERV_DIR}/%.o: ${SRC_SERV_DIR}/%.cpp
+# 				@mkdir -p $(@D)
+# 				${CPP} -I${INC_SERV_DIR} ${FLAGS} -O3 -c $< -o $@
 
 cclean:
 				@ ${RM} -rf ${OBJS_CLI_DIR}
 				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}objs ✔️"
 
-sclean:
-				@ ${RM} -rf ${OBJS_SERV_DIR}
-				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}objs ✔️"
+# sclean:
+# 				@ ${RM} -rf ${OBJS_SERV_DIR}
+# 				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}objs ✔️"
 
 fclean:			cclean sclean
 				@ ${RM} ${CLIENT_NAME}
