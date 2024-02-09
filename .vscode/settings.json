@@ -50,6 +50,7 @@
         "mlx_int.h": "c",
         "cinttypes": "cpp",
         "ctime": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "set": "cpp"
     }
 }

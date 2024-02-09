@@ -10,7 +10,7 @@ CLIENT_NAME		:= so_long
 SRC_CLI_DIR		:= game/srcs
 INC_CLI_DIR		:= game/includes
 OBJS_CLI_DIR	:= game/objs
-SRCS_CLI		:= main.cpp Network.cpp Params.cpp
+SRCS_CLI		:= main.cpp Network.cpp Params.cpp collision.cpp
 
 # GFX
 SFMLFLAGS		:= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network

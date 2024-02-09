@@ -6,18 +6,20 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:22:34 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/08 23:08:19 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/09 15:18:27 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.hpp"
 #include "Network.hpp"
 #include "Params.hpp"
+#include "setup.hpp"
+
 
 int main(int argc, char const *argv[])
 {
-
-    if (argc < 3 && argc > 4)
+    std::cout << argc;
+    if (argc < 3 || argc > 4)
     {
         std::cout << "usage for server: ./so_long -s PORT" << std::endl;
         std::cout << "usage for client: ./so_long -c IP PORT" << std::endl;
@@ -101,28 +103,24 @@ int main(int argc, char const *argv[])
 
     if (mode == "-s")
     {
-        texture1.loadFromFile("assets/p1.png", sf::IntRect(0, 0, 32, 32));
+        texture1.loadFromFile("assets/p1.png", sf::IntRect(0, 0, SPRITES_SIZE, SPRITES_SIZE));
         sprite1.setTexture(texture1);
-        texture2.loadFromFile("assets/p2.png", sf::IntRect(0, 0, 32, 32));
+        texture2.loadFromFile("assets/p2.png", sf::IntRect(0, 0, SPRITES_SIZE, SPRITES_SIZE));
         sprite2.setTexture(texture2);
+        sprite1.setPosition(sf::Vector2f(1 * SPRITES_SIZE , 3 * SPRITES_SIZE));
+        sprite2.setPosition(sf::Vector2f(23 * SPRITES_SIZE, 15 * SPRITES_SIZE));
     }
     else
     {
-        texture1.loadFromFile("assets/p2.png", sf::IntRect(0, 0, 32, 32));
+        texture1.loadFromFile("assets/p2.png", sf::IntRect(0, 0, SPRITES_SIZE, SPRITES_SIZE));
         sprite1.setTexture(texture1);
-        texture2.loadFromFile("assets/p1.png", sf::IntRect(0, 0, 32, 32));
+        texture2.loadFromFile("assets/p1.png", sf::IntRect(0, 0, SPRITES_SIZE, SPRITES_SIZE));
         sprite2.setTexture(texture2);
+        sprite1.setPosition(sf::Vector2f(23 * SPRITES_SIZE, 15 * SPRITES_SIZE));
+        sprite2.setPosition(sf::Vector2f(1 * SPRITES_SIZE, 3 * SPRITES_SIZE));
     }
 
-    // sf::RectangleShape rect1, rect2;
-
-    // rect1.setSize(sf::Vector2f(20,20));
-    // rect2.setSize(sf::Vector2f(20,20));
-
-    // rect1.setFillColor(sf::Color::Red);
-    // rect2.setFillColor(sf::Color::Blue);
-
-    sf::RenderWindow    Window(sf::VideoMode(800, 600, 32), "So Long Network");
+    sf::RenderWindow    Window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "So Long Network");
     
     sf::Vector2f prevPosition, p2Position;
 
@@ -143,13 +141,13 @@ int main(int argc, char const *argv[])
 
         if (update) // move apenas para a janela em foco
         {            
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !collisionRight(sprite1.getPosition().x))
                 sprite1.move(0.1f, 0.0f);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !collisionLeft(sprite1.getPosition().x))
                 sprite1.move(-0.1f, 0.0f);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !collisionDown(sprite1.getPosition().y))
                 sprite1.move(0.0f, 0.1f);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !collisionUp(sprite1.getPosition().y))
                 sprite1.move(0.0f, -0.1f);
         }
 
@@ -175,8 +173,8 @@ int main(int argc, char const *argv[])
             {
                 if (playfield[col][line].x != -1 && playfield[col][line].y != -1)
                 {
-                    tiles.setPosition(col * 32, line * 32);
-                    tiles.setTextureRect(sf::IntRect(playfield[col][line].x * 32, playfield[col][line].y * 32, 32, 32));
+                    tiles.setPosition(col * SPRITES_SIZE, line * SPRITES_SIZE);
+                    tiles.setTextureRect(sf::IntRect(playfield[col][line].x * SPRITES_SIZE, playfield[col][line].y * SPRITES_SIZE, SPRITES_SIZE, SPRITES_SIZE));
                     Window.draw(tiles);
                 }
             }
