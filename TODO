@@ -1,8 +1,2 @@
-Server:
-    - English messages!
-    - check int functions for better returns
-    - x y for players
-
-Client:
-    - Game
-    - parser map and x y from server
+- wall collision
+- slide collison
