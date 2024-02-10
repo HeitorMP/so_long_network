@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:22:34 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/10 00:36:03 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/10 01:51:19 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,10 +149,13 @@ int main(int argc, char const *argv[])
                 sprite1.move(0.0f, 0.1f);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !collisionUp(sprite1.getPosition().y))
                 sprite1.move(0.0f, -0.1f);
+            if(spriteCollison(sprite1, sprite2))
+            {
+                sprite1.setPosition(prevPosition);
+            }
         }
 
         sf::Packet packet;
-        
         if (prevPosition != sprite1.getPosition())
         {
             packet << sprite1.getPosition().x << sprite1.getPosition().y; // alimentando o pacote;

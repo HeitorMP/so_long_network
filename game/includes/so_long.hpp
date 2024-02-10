@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:49:13 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/09 13:31:57 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/10 00:43:45 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,3 +26,4 @@ bool   collisionLeft(int const &);
 bool   collisionRight(int const &);
 bool   collisionUp(int const &);
 bool   collisionDown(int const &);
+bool    spriteCollison(sf::Sprite const&, sf::Sprite const&);
