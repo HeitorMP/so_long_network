@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:22:34 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/10 01:51:19 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/11 13:00:08 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 #include "Network.hpp"
 #include "Params.hpp"
 #include "setup.hpp"
+
+
+
+
+
+bool    is_wall(sf::Vector2i wall_candidate) // nao escalavel e momentaneo.
+{
+    return (wall_candidate.y == 0 || wall_candidate.y == 1 || wall_candidate.y == 4 \
+        || wall_candidate.x == 0 || wall_candidate.x == 5);
+}
 
 
 int main(int argc, char const *argv[])
@@ -58,8 +68,9 @@ int main(int argc, char const *argv[])
     bool update = false;
 
     /* TILE */
-    sf::Vector2i playfield[50][50];
-    sf::Vector2i loadCounter = sf::Vector2i(0, 0);
+    sf::Vector2i    playfield[50][50];
+    sf::Vector2i    loadCounter = sf::Vector2i(0, 0);
+     sf::Vector2i   collisions_mask[50][50]; // walls and colletables
 
     sf::Texture tileTexture;
     sf::Sprite  tiles;
@@ -83,7 +94,13 @@ int main(int argc, char const *argv[])
             if (!isdigit(x) || !isdigit(y))
                 playfield[loadCounter.x][loadCounter.y] = sf::Vector2i(-1, -1);
             else
+            {
                 playfield[loadCounter.x][loadCounter.y] = sf::Vector2i(x - '0', y - '0');
+                if (is_wall(playfield[loadCounter.x][loadCounter.y]))
+                    collisions_mask[loadCounter.x][loadCounter.y] = playfield[loadCounter.x][loadCounter.y];
+                else
+                    collisions_mask[loadCounter.x][loadCounter.y] = sf::Vector2i(-1,-1);
+            }
             
             if (map1file.peek() == '\n')
             {
@@ -141,13 +158,13 @@ int main(int argc, char const *argv[])
 
         if (update) // move apenas para a janela em foco
         {            
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !collisionRight(sprite1.getPosition().x))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !collisionRight(sprite1, collisions_mask))
                 sprite1.move(0.1f, 0.0f);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !collisionLeft(sprite1.getPosition().x))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !collisionLeft(sprite1, collisions_mask))
                 sprite1.move(-0.1f, 0.0f);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !collisionDown(sprite1.getPosition().y))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !collisionDown(sprite1, collisions_mask))
                 sprite1.move(0.0f, 0.1f);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !collisionUp(sprite1.getPosition().y))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !collisionUp(sprite1, collisions_mask))
                 sprite1.move(0.0f, -0.1f);
             if(spriteCollison(sprite1, sprite2))
             {
