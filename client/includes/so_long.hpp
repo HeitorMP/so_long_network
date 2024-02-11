@@ -7,3 +7,6 @@
 # include <cstring>
 # include <SFML/Graphics.hpp>
 # include <SFML/Network.hpp>
+# include "Client.hpp"
+
+# define FONT_SIZE 15

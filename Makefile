@@ -10,14 +10,14 @@ NAME_CLIENT		:= so_long
 SRC_CLIENT_DIR	:= client/srcs
 INC_CLIENT_DIR  := client/includes
 OBJS_CLIENT_DIR	:= client/objs
-SRCS_CLIENT		:= main.cpp
+SRCS_CLIENT		:= main.cpp Client.cpp
 
 #SERVER
 NAME_SERVER		:= so_long_server
 SRC_SERVER_DIR	:= server/srcs
 INC_SERVER_DIR  := server/includes
 OBJS_SERVER_DIR	:= server/objs
-SRCS_SERVER		:= main.cpp
+SRCS_SERVER		:= main.cpp Client.cpp
 
 # GFX
 SFMLFLAGS		:= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
