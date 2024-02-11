@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:01:39 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/11 16:39:40 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/11 17:16:55 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int main(int argc, char const *argv[])
     
     while(!done)
     {
+        std::cout << "size: " << clients.size() << std::endl;
         if (selector.wait())
         {
             if (selector.isReady(listener))
@@ -47,14 +48,13 @@ int main(int argc, char const *argv[])
                 {
                     if (selector.isReady(*clients[curr_cli]))
                     {
-                        std::cout << "cliente antigo aqui\n";
                         sf::Packet packet, sendPacket;
                         if(clients[curr_cli]->receive(packet) == sf::Socket::Done)
                         {
                             std::string text;
                             packet >> text;
+                            std::cout << text << std::endl;
                             sendPacket << text;
-                            std::cout << "size: " << clients.size() << std::endl;
                             for (size_t other_cli = 0; other_cli < clients.size(); other_cli++)
                             {
                                 if (curr_cli != other_cli)
@@ -67,6 +67,8 @@ int main(int argc, char const *argv[])
         }
     }
 
+    for (std::vector<sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); it++)
+        delete *it;
     
     return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/11 16:57:52 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/11 17:31:08 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int main(int argc, char const *argv[])
                     {
                         sf::Packet packet;
                         packet << id + ": " + text;
+                        socket.send(packet);
                         sf::Text displayText(text, font, 20);
                         displayText.setFillColor(sf::Color::Green);
                         chat.push_back(displayText);
@@ -93,6 +94,5 @@ int main(int argc, char const *argv[])
         Window.display();
         Window.clear();
     }
-    
     return 0;
 }
