@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/11 16:17:53 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/11 16:57:52 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
 {
     (void)argc;
     (void)argv;
-    sf::IpAddress   ip = sf::IpAddress("127.0.0.1");
+    sf::IpAddress   ip = sf::IpAddress(argv[1]);
     sf::TcpSocket   socket;
     std::string     id;
     std::string     text = "";
