@@ -6,16 +6,24 @@ FLAGS			:= -Wall -Wextra -Werror -g #-fsanitize=address
 RM				:= rm -f
 
 #CLIENT
-CLIENT_NAME		:= so_long
-SRC_CLI_DIR		:= game/srcs
-INC_CLI_DIR		:= game/includes
-OBJS_CLI_DIR	:= game/objs
-SRCS_CLI		:= main.cpp Network.cpp Params.cpp collision.cpp
+NAME_CLIENT		:= so_long
+SRC_CLIENT_DIR	:= client/srcs
+INC_CLIENT_DIR  := client/includes
+OBJS_CLIENT_DIR	:= client/objs
+SRCS_CLIENT		:= main.cpp
+
+#SERVER
+NAME_SERVER		:= so_long_server
+SRC_SERVER_DIR	:= server/srcs
+INC_SERVER_DIR  := server/includes
+OBJS_SERVER_DIR	:= server/objs
+SRCS_SERVER		:= main.cpp
 
 # GFX
 SFMLFLAGS		:= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 
-OBJS_CLI		:= ${SRCS_CLI:%.cpp=${OBJS_CLI_DIR}/%.o}
+OBJS_CLIENT		:= ${SRCS_CLIENT:%.cpp=${OBJS_CLIENT_DIR}/%.o}
+OBJS_SERVER		:= ${SRCS_SERVER:%.cpp=${OBJS_SERVER_DIR}/%.o}
 
 # COLORS
 CLR_RMV			:= \033[0m
@@ -26,22 +34,32 @@ BLUE			:= \033[1;34m
 CYAN			:= \033[1;36m
 
 
-all: so_long
+all: ${NAME_SERVER} ${NAME_CLIENT}
 
-# COMPILATION
-so_long: ${CLIENT_NAME}
-${CLIENT_NAME}:		${OBJS_CLI}
-					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${CLIENT_NAME} ${CLR_RMV}..."
-					${CPP} ${OBJS_CLI} ${SFMLFLAGS} -o ${CLIENT_NAME}
-					@echo "${GREEN}${NAME} client created[0m 🎮 ✔️"
+# COMPILATION CLIENT
+${NAME_CLIENT}:		${OBJS_CLIENT}
+					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME_CLIENT} ${CLR_RMV}..."
+					${CPP} ${OBJS_CLIENT} ${SFMLFLAGS} -o ${NAME_CLIENT}
+					@echo "${GREEN}${NAME_CLIENT} server created[0m 🎮 ✔️"
 
-${OBJS_CLI}:		${OBJS_CLI_DIR}/%.o: ${SRC_CLI_DIR}/%.cpp
+${OBJS_CLIENT}:		${OBJS_CLIENT_DIR}/%.o: ${SRC_CLIENT_DIR}/%.cpp
 					@mkdir -p $(@D)
-					${CPP} -I${INC_CLI_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
+					${CPP} -I${INC_CLIENT_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
+
+# COMPILATION CLIENT
+${NAME_SERVER}:		${OBJS_SERVER}
+					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME_SERVER} ${CLR_RMV}..."
+					${CPP} ${OBJS_SERVER} ${SFMLFLAGS} -o ${NAME_SERVER}
+					@echo "${GREEN}${NAME_SERVER} server created[0m 🎮 ✔️"
+
+${OBJS_SERVER}:		${OBJS_SERVER_DIR}/%.o: ${SRC_SERVER_DIR}/%.cpp
+					@mkdir -p $(@D)
+					${CPP} -I${INC_SERVER_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
 
 clean:
-				@ ${RM} -rf ${OBJS_CLI_DIR}
-				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}objs ✔️"
+				@ ${RM} -rf ${OBJS_CLIENT_DIR} ${OBJS_SERVER_DIR}
+				@ echo "${RED}Deleting ${CYAN}${NAME_CLIENT} ${CLR_RMV}objs ✔️"
+				@ echo "${RED}Deleting ${CYAN}${NAME_SERVER} ${CLR_RMV}objs ✔️"
 
 fclean:			clean
 				@ ${RM} ${CLIENT_NAME}
