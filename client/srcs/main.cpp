@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/11 17:31:08 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/11 17:47:04 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ int main(int argc, char const *argv[])
         std::string tempText;
         if(packet >> tempText)
         {
-            sf::Text displayText(text, font, 20);
+            std::cout << tempText << std::endl;
+            sf::Text displayText(tempText, font, 20);
             displayText.setFillColor(sf::Color::Blue);
             chat.push_back(displayText);
         }
