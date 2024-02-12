@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/12 19:02:29 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/12 19:07:06 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,6 @@ int main(int argc, char const *argv[])
             drawText.setPosition(0, i * FONT_SIZE);
             Window.draw(drawText);
         }
-
         // receber dados do servidor
         // printar inimigos
         Window.display();

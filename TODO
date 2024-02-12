@@ -1,2 +1,13 @@
-- wall collision
-- slide collison
+- chat server:
+    * backspace;
+    * scroll system;
+
+
+- client:
+    * parse info -> skin / map etc;
+    * draw other players;
+
+- server game
+    * send map;
+
+

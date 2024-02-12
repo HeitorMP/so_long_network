@@ -24,8 +24,7 @@ NAME_SERVER_C		:= chat_server
 SRC_SERVERC_DIR		:= server_chat/srcs
 INC_SERVERC_DIR  	:= server_chat/includes
 OBJS_SERVERC_DIR	:= server_chat/objs
-SRCS_SERVERC		:= main.cpp Client.cpp
-
+SRCS_SERVERC		:= main.cpp
 # GFX
 SFMLFLAGS		:= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 

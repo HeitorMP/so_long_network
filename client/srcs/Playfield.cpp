@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 09:00:43 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/12 09:26:05 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/12 19:11:27 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool    is_wall(sf::Vector2i wall_candidate) // nao escalavel e momentaneo.
 
 Playfield::Playfield()
 {
-    _map1file.open("./server/maps/map1.txt");
+    _map1file.open("./server_game/maps/map1.txt");
     std::cout << _map1file.is_open() << std::endl;
 }
 
@@ -56,7 +56,6 @@ void    Playfield::generatePlayfield()
                 else
                     _collisions_mask[_loadCounter.x][_loadCounter.y] = sf::Vector2i(-1,-1);
             }
-            
             if (_map1file.peek() == '\n')
             {
                 _loadCounter.x = 0;
@@ -69,7 +68,6 @@ void    Playfield::generatePlayfield()
     } else {
         std::cout << "nao abriu\n";
     }
-    
 }
 
 void    Playfield::drawPlayfield(sf::RenderWindow &Window)
