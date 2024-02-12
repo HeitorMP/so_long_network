@@ -73,13 +73,15 @@ ${OBJS_SERVERC}:	${OBJS_SERVERC_DIR}/%.o: ${SRC_SERVERC_DIR}/%.cpp
 					${CPP} -I${INC_SERVERC_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
 
 clean:
-				@ ${RM} -rf ${OBJS_CLIENT_DIR} ${OBJS_SERVER_DIR}
+				@ ${RM} -rf ${OBJS_CLIENT_DIR} ${OBJS_SERVERG_DIR} ${OBJS_SERVERC_DIR}
 				@ echo "${RED}Deleting ${CYAN}${NAME_CLIENT} ${CLR_RMV}objs ✔️"
-				@ echo "${RED}Deleting ${CYAN}${NAME_SERVER} ${CLR_RMV}objs ✔️"
+				@ echo "${RED}Deleting ${CYAN}${NAME_SERVER_C} ${CLR_RMV}objs ✔️"
+				@ echo "${RED}Deleting ${CYAN}${NAME_SERVER_G} ${CLR_RMV}objs ✔️"
 
 fclean:			clean
-				@ ${RM} ${CLIENT_NAME}
-				@ ${RM} ${SERVER_NAME}
+				@ ${RM} ${NAME_CLIENT}
+				@ ${RM} ${NAME_SERVER_C}
+				@ ${RM} ${NAME_SERVER_G}
 				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}binary ✔️"
 
 re:				fclean all
