@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/11 23:29:05 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/12 19:02:29 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,32 +18,43 @@ int main(int argc, char const *argv[])
     (void)argc;
     (void)argv;
     sf::IpAddress   ip = sf::IpAddress(argv[1]);
-    sf::TcpSocket   socket;
+    sf::TcpSocket   game_socket;
+    sf::TcpSocket   chat_socket;
     std::string     text = "";
     Client          self;
-    bool            is_chat_on = false;
     bool            window_focus = false;
-    
+    bool            chat_is_on = false;
+    Playfield       pf;
+
     std::cout << "Enter name: ";
     std::string name;
     std::cin >> name;
     self.set_name(name);
-    std::cout << self << std::endl;
-    socket.connect(ip, 3000);
+    game_socket.connect(ip, 3000);
+    chat_socket.connect(ip, 35000);
 
     sf::RenderWindow    Window(sf::VideoMode(800, 600, 32), "So Long");
     std::vector<sf::Text> chat;
 
-    sf::Packet packet;
-    packet = self.get_player_info();
-    socket.send(packet);
+    // send client info to game server
+    sf::Packet game_packet;
+    game_packet = self.get_player_info();
+    game_socket.send(game_packet);
+    std::cout << self << std::endl; // should print the client without unique id
 
-    sf::Packet  first_receive;
-    socket.receive(first_receive);
-    self.set_player_info(first_receive);
-    std::cout << self << std::endl;
+    // receive the response from game server with the unique id
+    sf::Packet  game_first_receive;
+    game_socket.receive(game_first_receive);
+    self.set_player_info(game_first_receive);
+    std::cout << self << std::endl; // should print the client with unique id
+
+    //send the name to chat server
+    sf::Packet chat_packet;
+    chat_packet << name;
+    chat_socket.send(chat_packet);
      
-    socket.setBlocking(false);
+    game_socket.setBlocking(false);
+    chat_socket.setBlocking(false);
 
     Window.setTitle(self.get_name());
     sf::Font    font;
@@ -70,12 +81,15 @@ int main(int argc, char const *argv[])
     sprite.setTexture(texture);  //This is where you add an & to designate texture as a pointer
     sprite.setOrigin(size.x / 2, size.y / 2);
 
+    pf.generatePlayfield();
+
     while(Window.isOpen())
     {
         sf::Event   Event;
+        
         while(Window.pollEvent(Event))
         {
-            if (is_chat_on)
+            if (chat_is_on)
             {
                 switch (Event.type)
                 {
@@ -84,14 +98,14 @@ int main(int argc, char const *argv[])
                         break;
                     case sf::Event::KeyReleased:
                         if (Event.key.code == sf::Keyboard::F1)
-                            is_chat_on = !is_chat_on;
+                            chat_is_on = !chat_is_on;
                         else if(Event.key.code == sf::Keyboard::Escape)
                             Window.close();
                         else if(Event.key.code == sf::Keyboard::Return)
-                        {
-                            sf::Packet packet;
-                            packet << (self.get_name() + ": " + text);
-                            socket.send(packet);
+                        {  
+                            sf::Packet text_packet;
+                            text_packet << (self.get_name() + ": " + text);
+                            chat_socket.send(text_packet);
                             sf::Text displayText(text, font, FONT_SIZE);
                             displayText.setFillColor(sf::Color::Green);
                             chat.push_back(displayText);
@@ -114,26 +128,51 @@ int main(int argc, char const *argv[])
                 else if(Event.type == sf::Event::KeyReleased)
                 {
                     if (Event.key.code == sf::Keyboard::F1)
-                        is_chat_on = !is_chat_on;
+                        chat_is_on = !chat_is_on;
+                    if (Event.key.code == sf::Keyboard::W)
+                        self.key_up = false;
+                    if (Event.key.code == sf::Keyboard::S)
+                        self.key_down = false;
+                    if (Event.key.code == sf::Keyboard::A)
+                        self.key_left = false;
+                    if (Event.key.code == sf::Keyboard::D)
+                        self.key_right = false;
+                }
+                else if(Event.type == sf::Event::KeyPressed)
+                {
+                    if (Event.key.code == sf::Keyboard::W)
+                        self.key_up = true;
+                    if (Event.key.code == sf::Keyboard::S)
+                        self.key_down = true;
+                    if (Event.key.code == sf::Keyboard::A)
+                        self.key_left = true;
+                    if (Event.key.code == sf::Keyboard::D)
+                        self.key_right = true;
                 }
             }
         }
 
+        Window.clear();
         if (window_focus)
         {
-            std::cout << "moving here\n";
+            self.movePlayer();
+            std::cout << "up: " << self.key_up <<std::endl;
+            std::cout << "down: " << self.key_down <<std::endl;
+            std::cout << "left: " << self.key_left <<std::endl;
+            std::cout << "right: " << self.key_right <<std::endl;
         }
         Window.setView(gameView);
-        Window.draw(sprite1);
+        pf.drawPlayfield(Window);
+        Window.draw(self.sp1);
 
-        if(is_chat_on)
+        if(chat_is_on)
         {
             Window.setView(chatView);
-            sf::Packet  packet;
-            socket.receive(packet);
+            sf::Packet  text_packet;
+            chat_socket.receive(text_packet);
 
             std::string tempText;
-            if(packet >> tempText)
+            if(text_packet >> tempText)
             {
                 sf::Text displayText(tempText, font, FONT_SIZE);
                 displayText.setFillColor(sf::Color::Blue);
@@ -150,13 +189,16 @@ int main(int argc, char const *argv[])
             drawText.setPosition(0, i * FONT_SIZE);
             Window.draw(drawText);
         }
+
+        // receber dados do servidor
+        // printar inimigos
         Window.display();
-        Window.clear();
     }
 
     sf::Packet  done;
     done << "CMD:BYE";
-    socket.send(done);
-    socket.disconnect();
+    chat_socket.send(done);
+    chat_socket.disconnect();
+    game_socket.disconnect();
     return 0;
 }

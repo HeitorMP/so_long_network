@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 19:33:35 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/12 09:50:54 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/12 08:48:15 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,38 +18,24 @@
 # include <cstring>
 # include <SFML/Graphics.hpp>
 # include <SFML/Network.hpp>
-# include "so_long.hpp"
 
-class Client {
+class Client{
     private:
-        /* Packet */
+        
         std::string     _unique_id;
         std::string     _name;
         int             _skin_id; // numero do sprite imagem a ser renderizada.
         int             _score;      
         sf::Vector2f    _position;
         bool            _update;
-        
+    
     public:
 
-           /* Sprite */
-        sf::Sprite      sp1;
-        sf::Texture     tx1;
-
-        bool            key_up;
-        bool            key_down;
-        bool            key_left;
-        bool            key_right;
-        
-        
         Client();
         ~Client();
 
-        void            movePlayer();
-
-        /* PACKET */
-        sf::Packet       get_player_info();
-        void             set_player_info(sf::Packet);
+       sf::Packet       get_player_info();
+       void             set_player_info(sf::Packet);
 
         /* GETTERS & SETTERS */
         std::string     get_unique_id() const;

@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:01:39 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/11 22:50:09 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:56:52 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,27 +78,38 @@ int main(int argc, char const *argv[])
                 {
                     if (selector.isReady(*clients_sockets[curr_cli]))
                     {
-                        sf::Packet packet, sendPacket;
-                        if(clients_sockets[curr_cli]->receive(packet) == sf::Socket::Done)
+                        sf::Packet packet_chat_is_on;
+                        bool    is_chat_on;
+                        if (clients_sockets[curr_cli]->receive(packet_chat_is_on) == sf::Socket::Done)
                         {
-                            std::string text = "";
-                            packet >> text;
-                            std::cout << text << std::endl;
-                            if (text.find("CMD:BYE") != std::string::npos)
+                            packet_chat_is_on >> is_chat_on;
+                            std::cout << "chat on: " << is_chat_on << std::endl;
+                        }
+                        if (is_chat_on)
+                        {    
+                            sf::Packet chat_packet, sendChatPacket;
+                            sf::Packet player_number;
+                            if(clients_sockets[curr_cli]->receive(chat_packet) == sf::Socket::Done)
                             {
-                                broadcast("client disconnected\n", clients_sockets);
-                                selector.remove(*clients_sockets[curr_cli]);
-                                auto it = find(clients_sockets.begin(), clients_sockets.end(), clients_sockets[curr_cli]);
-                                if (it != clients_sockets.end())
-                                    clients_sockets.erase(it);
-                            }
-                            else
-                            {    
-                                sendPacket << text;
-                                for (size_t other_cli = 0; other_cli < clients_sockets.size(); other_cli++)
+                                std::string text = "";
+                                chat_packet >> text;
+                                std::cout << text << std::endl;
+                                if (text.find("CMD:BYE") != std::string::npos)
                                 {
-                                    if (curr_cli != other_cli)
-                                        clients_sockets[other_cli]->send(sendPacket);
+                                    broadcast("client disconnected\n", clients_sockets);
+                                    selector.remove(*clients_sockets[curr_cli]);
+                                    auto it = find(clients_sockets.begin(), clients_sockets.end(), clients_sockets[curr_cli]);
+                                    if (it != clients_sockets.end())
+                                        clients_sockets.erase(it);
+                                }
+                                else
+                                {    
+                                    sendChatPacket << text;
+                                    for (size_t other_cli = 0; other_cli < clients_sockets.size(); other_cli++)
+                                    {
+                                        if (curr_cli != other_cli)
+                                            clients_sockets[other_cli]->send(sendChatPacket);
+                                    }
                                 }
                             }
                         }

@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 19:44:49 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/12 09:55:12 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/11 22:35:36 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,6 @@ Client::Client()
     _position.x = rand() % 800;
     _position.y = rand() % 600;
     _update = false;
-
-    key_up = false;
-    key_down = false;
-    key_left = false;
-    key_right = false;
-
-    tx1.loadFromFile("assets/p2.png", sf::IntRect(0, 0, GRID_SIZE, GRID_SIZE));
-    sp1.setTexture(tx1);
-    
 }
 
 Client::~Client()
@@ -48,18 +39,6 @@ void        Client::set_player_info(sf::Packet packet_from_server)
 {
     packet_from_server >> _unique_id >> _name >> _skin_id >> _score >> _position.x >> _position.y >> _update;
     // checar valores e indicar possiveis erros;
-}
-
-void        Client::movePlayer()
-{
-    if (key_up)
-        sp1.move(0.0f, -0.1f);
-    if (key_down)
-        sp1.move(0.0f, 0.1f);
-    if (key_left)
-        sp1.move(-0.1f, 0.0f);
-    if (key_right)
-        sp1.move(0.1f, 0.0f);
 }
 
 

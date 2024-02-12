@@ -10,20 +10,28 @@ NAME_CLIENT		:= so_long
 SRC_CLIENT_DIR	:= client/srcs
 INC_CLIENT_DIR  := client/includes
 OBJS_CLIENT_DIR	:= client/objs
-SRCS_CLIENT		:= main.cpp Client.cpp
+SRCS_CLIENT		:= main.cpp Client.cpp Playfield.cpp
 
-#SERVER
-NAME_SERVER		:= so_long_server
-SRC_SERVER_DIR	:= server/srcs
-INC_SERVER_DIR  := server/includes
-OBJS_SERVER_DIR	:= server/objs
-SRCS_SERVER		:= main.cpp Client.cpp
+#SERVER GAME
+NAME_SERVER_G		:= so_long_server
+SRC_SERVERG_DIR		:= server_game/srcs
+INC_SERVERG_DIR  	:= server_game/includes
+OBJS_SERVERG_DIR	:= server_game/objs
+SRCS_SERVERG		:= main.cpp Client.cpp
+
+#SERVER CHAT
+NAME_SERVER_C		:= chat_server
+SRC_SERVERC_DIR		:= server_chat/srcs
+INC_SERVERC_DIR  	:= server_chat/includes
+OBJS_SERVERC_DIR	:= server_chat/objs
+SRCS_SERVERC		:= main.cpp Client.cpp
 
 # GFX
 SFMLFLAGS		:= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 
 OBJS_CLIENT		:= ${SRCS_CLIENT:%.cpp=${OBJS_CLIENT_DIR}/%.o}
-OBJS_SERVER		:= ${SRCS_SERVER:%.cpp=${OBJS_SERVER_DIR}/%.o}
+OBJS_SERVERG	:= ${SRCS_SERVERG:%.cpp=${OBJS_SERVERG_DIR}/%.o}
+OBJS_SERVERC	:= ${SRCS_SERVERC:%.cpp=${OBJS_SERVERC_DIR}/%.o}
 
 # COLORS
 CLR_RMV			:= \033[0m
@@ -34,7 +42,7 @@ BLUE			:= \033[1;34m
 CYAN			:= \033[1;36m
 
 
-all: ${NAME_SERVER} ${NAME_CLIENT}
+all: ${NAME_SERVER_G} ${NAME_SERVER_C} ${NAME_CLIENT}
 
 # COMPILATION CLIENT
 ${NAME_CLIENT}:		${OBJS_CLIENT}
@@ -46,15 +54,24 @@ ${OBJS_CLIENT}:		${OBJS_CLIENT_DIR}/%.o: ${SRC_CLIENT_DIR}/%.cpp
 					@mkdir -p $(@D)
 					${CPP} -I${INC_CLIENT_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
 
-# COMPILATION CLIENT
-${NAME_SERVER}:		${OBJS_SERVER}
-					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME_SERVER} ${CLR_RMV}..."
-					${CPP} ${OBJS_SERVER} ${SFMLFLAGS} -o ${NAME_SERVER}
-					@echo "${GREEN}${NAME_SERVER} server created[0m 🎮 ✔️"
+# COMPILATION SERVER GAME
+${NAME_SERVER_G}:	${OBJS_SERVER}
+					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME_SERVER_G} ${CLR_RMV}..."
+					${CPP} ${OBJS_SERVERG} ${SFMLFLAGS} -o ${NAME_SERVER_G}
+					@echo "${GREEN}${NAME_SERVER_G} server created[0m 🎮 ✔️"
 
-${OBJS_SERVER}:		${OBJS_SERVER_DIR}/%.o: ${SRC_SERVER_DIR}/%.cpp
+${OBJS_SERVERG}:	${OBJS_SERVERG_DIR}/%.o: ${SRC_SERVERG_DIR}/%.cpp
 					@mkdir -p $(@D)
-					${CPP} -I${INC_SERVER_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
+					${CPP} -I${INC_SERVERG_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
+# COMPILATION SERVER CHAT
+${NAME_SERVER_C}:	${OBJS_SERVERC}
+					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME_SERVER_C} ${CLR_RMV}..."
+					${CPP} ${OBJS_SERVERC} ${SFMLFLAGS} -o ${NAME_SERVER_C}
+					@echo "${GREEN}${NAME_SERVER_C} server created[0m 🎮 ✔️"
+
+${OBJS_SERVERC}:	${OBJS_SERVERC_DIR}/%.o: ${SRC_SERVERC_DIR}/%.cpp
+					@mkdir -p $(@D)
+					${CPP} -I${INC_SERVERC_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
 
 clean:
 				@ ${RM} -rf ${OBJS_CLIENT_DIR} ${OBJS_SERVER_DIR}
