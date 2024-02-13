@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/13 08:11:19 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:43:41 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,16 @@ int main(int argc, char const *argv[])
                             chat.push_back(displayText);
                             text = "";
                         }
-                        else if(Event.key.code == sf::Keyboard::BackSpace)
-                        {  
-                            if (text.size())
-                                text.pop_back();
-                        }
                         break;
                     case sf::Event::TextEntered:
-                        text += Event.text.unicode;
+                        if (Event.text.unicode == '\b' && text.size() > 0)
+                        {
+                            text.pop_back();
+                        }
+                        else
+                            text += Event.text.unicode;
+                        if (text.find('\b') != std::string::npos)
+                                text.erase(text.find('\b'), 1);
                         break;
                     default:
                         break;
