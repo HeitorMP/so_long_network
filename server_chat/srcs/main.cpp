@@ -6,12 +6,11 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:01:39 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/12 19:02:54 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/13 08:30:26 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server_chat.hpp"
-#include "Client.hpp"
 
 void    broadcast(std::string message, std::vector<sf::TcpSocket*> clients)
 {

@@ -2,7 +2,7 @@
 
 # SYSTEM
 CPP 			:= g++
-FLAGS			:= -Wall -Wextra -Werror -g #-fsanitize=address
+FLAGS			:= -Wall -Wextra -Werror #-g #-fsanitize=address
 RM				:= rm -f
 
 #CLIENT
@@ -41,36 +41,36 @@ BLUE			:= \033[1;34m
 CYAN			:= \033[1;36m
 
 
-all: ${NAME_SERVER_G} ${NAME_SERVER_C} ${NAME_CLIENT}
+all: ${NAME_CLIENT} ${NAME_SERVER_G} ${NAME_SERVER_C}
 
 # COMPILATION CLIENT
-${NAME_CLIENT}:		${OBJS_CLIENT}
+${NAME_CLIENT}:		${OBJS_CLIENT} 
 					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME_CLIENT} ${CLR_RMV}..."
-					${CPP} ${OBJS_CLIENT} ${SFMLFLAGS} -o ${NAME_CLIENT}
-					@echo "${GREEN}${NAME_CLIENT} server created[0m 🎮 ✔️"
+					${CPP} ${OBJS_CLIENT} ${SFMLFLAGS} -o bin/${NAME_CLIENT}
+					@echo "${GREEN}${NAME_CLIENT} so_long client created[0m 🎮 ✔️"
 
 ${OBJS_CLIENT}:		${OBJS_CLIENT_DIR}/%.o: ${SRC_CLIENT_DIR}/%.cpp
 					@mkdir -p $(@D)
-					${CPP} -I${INC_CLIENT_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
+					${CPP} -I${INC_CLIENT_DIR} ${FLAGS} -O3 -c $< -o $@
 
 # COMPILATION SERVER GAME
-${NAME_SERVER_G}:	${OBJS_SERVER}
+${NAME_SERVER_G}:	${OBJS_SERVERG}
 					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME_SERVER_G} ${CLR_RMV}..."
-					${CPP} ${OBJS_SERVERG} ${SFMLFLAGS} -o ${NAME_SERVER_G}
-					@echo "${GREEN}${NAME_SERVER_G} server created[0m 🎮 ✔️"
+					${CPP} ${OBJS_SERVERG} ${SFMLFLAGS} -o  bin/${NAME_SERVER_G}
+					@echo "${GREEN}${NAME_SERVER_G} game server created[0m 🎮 ✔️"
 
 ${OBJS_SERVERG}:	${OBJS_SERVERG_DIR}/%.o: ${SRC_SERVERG_DIR}/%.cpp
 					@mkdir -p $(@D)
-					${CPP} -I${INC_SERVERG_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
+					${CPP} -I${INC_SERVERG_DIR} ${FLAGS} -O3 -c $< -o $@
 # COMPILATION SERVER CHAT
 ${NAME_SERVER_C}:	${OBJS_SERVERC}
 					@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME_SERVER_C} ${CLR_RMV}..."
-					${CPP} ${OBJS_SERVERC} ${SFMLFLAGS} -o ${NAME_SERVER_C}
-					@echo "${GREEN}${NAME_SERVER_C} server created[0m 🎮 ✔️"
+					${CPP} ${OBJS_SERVERC} ${SFMLFLAGS} -o  bin/${NAME_SERVER_C}
+					@echo "${GREEN}${NAME_SERVER_C} chat server created[0m 🎮 ✔️"
 
 ${OBJS_SERVERC}:	${OBJS_SERVERC_DIR}/%.o: ${SRC_SERVERC_DIR}/%.cpp
 					@mkdir -p $(@D)
-					${CPP} -I${INC_SERVERC_DIR} ${FLAGS} ${SFMLFLAGS} -O3 -c $< -o $@
+					${CPP} -I${INC_SERVERC_DIR} ${FLAGS} -O3 -c $< -o $@
 
 clean:
 				@ ${RM} -rf ${OBJS_CLIENT_DIR} ${OBJS_SERVERG_DIR} ${OBJS_SERVERC_DIR}
@@ -79,9 +79,9 @@ clean:
 				@ echo "${RED}Deleting ${CYAN}${NAME_SERVER_G} ${CLR_RMV}objs ✔️"
 
 fclean:			clean
-				@ ${RM} ${NAME_CLIENT}
-				@ ${RM} ${NAME_SERVER_C}
-				@ ${RM} ${NAME_SERVER_G}
+				@ ${RM} bin/${NAME_CLIENT}
+				@ ${RM} bin/${NAME_SERVER_C}
+				@ ${RM} bin/${NAME_SERVER_G}
 				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}binary ✔️"
 
 re:				fclean all
