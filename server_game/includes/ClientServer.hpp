@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Client.hpp                                         :+:      :+:    :+:   */
+/*   ClientServerServer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 19:33:35 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/12 08:48:15 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/16 09:30:20 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <SFML/Graphics.hpp>
 # include <SFML/Network.hpp>
 
-class Client{
+class ClientServer{
     private:
         
         std::string     _unique_id;
@@ -31,10 +31,11 @@ class Client{
     
     public:
 
-        Client();
-        ~Client();
+        ClientServer();
+        ~ClientServer();
 
        sf::Packet       get_player_info();
+       sf::Packet       get_player_pos_packet();
        void             set_player_info(sf::Packet);
 
         /* GETTERS & SETTERS */
@@ -51,4 +52,4 @@ class Client{
         void            set_position(sf::Vector2f const &);
 };
 
-std::ostream &  operator<<( std::ostream & o, Client & i );
+std::ostream &  operator<<( std::ostream & o, ClientServer & i );

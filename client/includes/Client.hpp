@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 19:33:35 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/12 09:50:54 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/16 10:55:45 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ class Client {
         std::string     _name;
         int             _skin_id; // numero do sprite imagem a ser renderizada.
         int             _score;      
-        sf::Vector2f    _position;
         bool            _update;
         
     public:
@@ -35,6 +34,7 @@ class Client {
            /* Sprite */
         sf::Sprite      sp1;
         sf::Texture     tx1;
+        sf::Vector2f    _position;
 
         bool            key_up;
         bool            key_down;
@@ -46,10 +46,13 @@ class Client {
         ~Client();
 
         void            movePlayer();
+        void            update();
+        void            apply_skin();
 
         /* PACKET */
-        sf::Packet       get_player_info();
-        void             set_player_info(sf::Packet);
+        sf::Packet      get_player_info();
+        sf::Packet      get_player_pos_packet();
+        void            set_player_info(sf::Packet);
 
         /* GETTERS & SETTERS */
         std::string     get_unique_id() const;

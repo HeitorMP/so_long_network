@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:01:39 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/13 11:42:18 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/16 10:01:41 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,29 +66,27 @@ int main(int argc, char const *argv[])
                 {
                     if (selector.isReady(*clients_sockets[curr_cli]))
                     {        
-                        {    
-                            sf::Packet chat_packet, sendChatPacket;
-                            if(clients_sockets[curr_cli]->receive(chat_packet) == sf::Socket::Done)
+                        sf::Packet chat_packet, sendChatPacket;
+                        if(clients_sockets[curr_cli]->receive(chat_packet) == sf::Socket::Done)
+                        {
+                            std::string text = "";
+                            chat_packet >> text;
+                            std::cout << text << std::endl;
+                            if (text.find("CMD:BYE") != std::string::npos)
                             {
-                                std::string text = "";
-                                chat_packet >> text;
-                                std::cout << text << std::endl;
-                                if (text.find("CMD:BYE") != std::string::npos)
+                                broadcast("client disconnected\n", clients_sockets);
+                                selector.remove(*clients_sockets[curr_cli]);
+                                auto it = find(clients_sockets.begin(), clients_sockets.end(), clients_sockets[curr_cli]);
+                                if (it != clients_sockets.end())
+                                    clients_sockets.erase(it);
+                            }
+                            else
+                            {    
+                                sendChatPacket << text;
+                                for (size_t other_cli = 0; other_cli < clients_sockets.size(); other_cli++)
                                 {
-                                    broadcast("client disconnected\n", clients_sockets);
-                                    selector.remove(*clients_sockets[curr_cli]);
-                                    auto it = find(clients_sockets.begin(), clients_sockets.end(), clients_sockets[curr_cli]);
-                                    if (it != clients_sockets.end())
-                                        clients_sockets.erase(it);
-                                }
-                                else
-                                {    
-                                    sendChatPacket << text;
-                                    for (size_t other_cli = 0; other_cli < clients_sockets.size(); other_cli++)
-                                    {
-                                        if (curr_cli != other_cli)
-                                            clients_sockets[other_cli]->send(sendChatPacket);
-                                    }
+                                    if (curr_cli != other_cli)
+                                        clients_sockets[other_cli]->send(sendChatPacket);
                                 }
                             }
                         }

@@ -4,7 +4,9 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/server_chat/includes"
+                "${workspaceFolder}/server_chat/includes/**",
+                "${workspaceFolder}/server_game/includes/**",
+                "${workspaceFolder}/client/includes/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",

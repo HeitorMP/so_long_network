@@ -17,7 +17,7 @@ NAME_SERVER_G		:= so_long_server
 SRC_SERVERG_DIR		:= server_game/srcs
 INC_SERVERG_DIR  	:= server_game/includes
 OBJS_SERVERG_DIR	:= server_game/objs
-SRCS_SERVERG		:= main.cpp Client.cpp
+SRCS_SERVERG		:= main.cpp ClientServer.cpp
 
 #SERVER CHAT
 NAME_SERVER_C		:= chat_server

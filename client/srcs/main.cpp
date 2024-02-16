@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/13 11:43:41 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/16 11:05:41 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int main(int argc, char const *argv[])
     sf::TcpSocket   chat_socket;
     std::string     text = "";
     Client          self;
+    Client          tmp_enemy;
     bool            window_focus = false;
     bool            chat_is_on = false;
     Playfield       pf;
@@ -30,8 +31,13 @@ int main(int argc, char const *argv[])
     std::string name;
     std::cin >> name;
     self.set_name(name);
-    game_socket.connect(ip, 3000);
-    chat_socket.connect(ip, 35000);
+    self.set_position(sf::Vector2f(rand() % 800, rand() % 600));
+    
+    if ( game_socket.connect(ip, 3000) != sf::Socket::Done || chat_socket.connect(ip, 35000) != sf::Socket::Done)
+    {
+        std::cerr << "Error: Server connection!\n";
+        exit (1);
+    }
 
     sf::RenderWindow    Window(sf::VideoMode(800, 600, 32), "So Long");
     std::vector<sf::Text> chat;
@@ -47,6 +53,7 @@ int main(int argc, char const *argv[])
     game_socket.receive(game_first_receive);
     self.set_player_info(game_first_receive);
     std::cout << self << std::endl; // should print the client with unique id
+    self.apply_skin();
 
     //send the name to chat server
     sf::Packet chat_packet;
@@ -68,11 +75,6 @@ int main(int argc, char const *argv[])
 
     // mini-map (upper-right corner)
     chatView.setViewport(sf::FloatRect(0.75f, 0.f, 0.25f, 0.25f));
-
-    sf::Sprite sprite1;
-    sf::Texture texture1;
-    texture1.loadFromFile("assets/p1.png", sf::IntRect(0, 0, 32, 32));
-    sprite1.setTexture(texture1);
 
     sf::Texture texture;
     texture.loadFromFile("assets/5183000.jpg");
@@ -160,21 +162,35 @@ int main(int argc, char const *argv[])
         }
 
         Window.clear();
+
+        
         if (window_focus)
-        {
-            self.movePlayer();
-            std::cout << "up: " << self.key_up <<std::endl;
-            std::cout << "down: " << self.key_down <<std::endl;
-            std::cout << "left: " << self.key_left <<std::endl;
-            std::cout << "right: " << self.key_right <<std::endl;
-        }
-        Window.setView(gameView);
+            self.movePlayer(); // move o player quando janela esta em foco apenas.
+        self.update();
+        Window.setView(gameView); // seleciona a tela do game
         pf.drawPlayfield(Window);
         Window.draw(self.sp1);
+        
+        sf::Packet  send_my_position, request_received;
+        send_my_position = self.get_player_info();
+        game_socket.send(send_my_position);
+        // receber dados do servidor
+        for (int enemy = 0; enemy < 1; enemy++)
+        {
+            if (game_socket.receive(request_received) == sf::Socket::Done)
+            {   
+                request_received >> tmp_enemy._position.x >> tmp_enemy._position.y;
+                tmp_enemy.apply_skin();
+                tmp_enemy.update();
+            }
+        }
+        // printar inimigos
+        Window.draw(tmp_enemy.sp1);
+      
 
         if(chat_is_on)
         {
-            Window.setView(chatView);
+            Window.setView(chatView); // se chat on muda pra janela do chat executa acoes no chat
             sf::Packet  text_packet;
             chat_socket.receive(text_packet);
 
@@ -196,8 +212,6 @@ int main(int argc, char const *argv[])
             drawText.setPosition(0, i * FONT_SIZE);
             Window.draw(drawText);
         }
-        // receber dados do servidor
-        // printar inimigos
         Window.display();
     }
 

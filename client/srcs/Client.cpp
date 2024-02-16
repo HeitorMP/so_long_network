@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 19:44:49 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/12 09:55:12 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/16 11:06:25 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,14 @@ Client::Client()
     _name = "";
     _skin_id = 0;
     _score = 0;
-    _position.x = rand() % 800;
-    _position.y = rand() % 600;
+    _position.x = 0;
+    _position.y = 0;
     _update = false;
 
     key_up = false;
     key_down = false;
     key_left = false;
     key_right = false;
-
-    tx1.loadFromFile("assets/p2.png", sf::IntRect(0, 0, GRID_SIZE, GRID_SIZE));
-    sp1.setTexture(tx1);
     
 }
 
@@ -44,6 +41,13 @@ sf::Packet  Client::get_player_info()
     return (packet);
 }
 
+sf::Packet  Client::get_player_pos_packet()
+{
+    sf::Packet packet;
+    packet << _position.x << _position.y;
+    return (packet);
+}
+
 void        Client::set_player_info(sf::Packet packet_from_server)
 {
     packet_from_server >> _unique_id >> _name >> _skin_id >> _score >> _position.x >> _position.y >> _update;
@@ -53,13 +57,32 @@ void        Client::set_player_info(sf::Packet packet_from_server)
 void        Client::movePlayer()
 {
     if (key_up)
-        sp1.move(0.0f, -0.1f);
+        _position.y -= 0.1;
     if (key_down)
-        sp1.move(0.0f, 0.1f);
+        _position.y += 0.1;
     if (key_left)
-        sp1.move(-0.1f, 0.0f);
+        _position.x -= 0.1;
     if (key_right)
-        sp1.move(0.1f, 0.0f);
+        _position.x += 0.1;
+}
+
+void    Client::update()
+{
+    sp1.setPosition(_position);
+}
+
+void    Client::apply_skin()
+{
+    if (_skin_id == 1)
+    {
+        tx1.loadFromFile("assets/p1.png", sf::IntRect(0, 0, GRID_SIZE, GRID_SIZE));
+        sp1.setTexture(tx1);
+    }
+    else
+    {
+        tx1.loadFromFile("assets/p2.png", sf::IntRect(0, 0, GRID_SIZE, GRID_SIZE));
+        sp1.setTexture(tx1);
+    }
 }
 
 
