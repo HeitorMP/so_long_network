@@ -14,20 +14,20 @@ dependencies: libsfml-dev
 
 ```bash
   sudo apt-get install libsfml-dev
+```
 
-  and then just run make inside the project folder.
+```bash
+  make
 ```
     
 ## Usage/Examples
 
-```bash
 Server:
-./so_long -s [PORT]
-
+```bash
+./bin/so_long_server
+```
 Client:
-./so_long -c [IP] [PORT]
-
-./so_long -s 3001
-./so_long -c 127.0.0.1 3001
+```bash
+.bin/so_long -c [IP]
 ```
 
