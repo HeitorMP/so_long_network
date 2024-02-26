@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:01:39 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/26 09:40:40 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:59:18 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ int chat_server()
     std::cout << "Chat server on\n";
     while(!done)
     {
-        std::cout << "size: " << clients_sockets.size() << std::endl;
         if (selector.wait())
         {
             if (selector.isReady(listener))
@@ -126,7 +125,6 @@ int chat_server()
                 if (socket->receive(first_receive) == sf::Socket::Done)
                 {
                     first_receive >> name;
-                    std::cout << name << " has connected to the server" << std::endl;
                 }
                 clients_sockets.push_back(socket);
                 selector.add(*socket);
