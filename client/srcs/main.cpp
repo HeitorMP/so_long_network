@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/26 09:34:09 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/26 10:21:42 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
     std::string name;
     std::cin >> name;
     self.set_name(name);
-    self.set_position(sf::Vector2f(rand() % 800, rand() % 600));
+    self.set_position(sf::Vector2f(rand() % 800, rand() % 600)); // change in the future.
     
     if ( game_socket.connect(ip, 3000) != sf::Socket::Done || chat_socket.connect(ip, 35000) != sf::Socket::Done)
     {
@@ -87,9 +87,21 @@ int main(int argc, char const *argv[])
 
     pf.generatePlayfield();
 
+    sf::Sprite      waiting;
+    sf::Texture     waiting_tx;
+
+    waiting_tx.loadFromFile("assets/p1.png", sf::IntRect(0, 0, GRID_SIZE, GRID_SIZE));
+    waiting.setTexture(waiting_tx);
+    waiting.setPosition(0, 0);
+
     while(Window.isOpen())
     {
         sf::Event   Event;
+
+        if (tmp_enemy.get_unique_id() != "")
+        {
+            Window.draw(waiting);
+        }
         
         while(Window.pollEvent(Event))
         {
