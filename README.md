@@ -28,6 +28,6 @@ Server:
 ```
 Client:
 ```bash
-.bin/so_long -c [IP]
+./bin/so_long [IP]
 ```
 
