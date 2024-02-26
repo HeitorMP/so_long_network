@@ -24,10 +24,10 @@ class ClientServer{
         
         std::string     _unique_id;
         std::string     _name;
-        int             _skin_id; // numero do sprite imagem a ser renderizada.
+        int             _skin_id;
         int             _score;      
         sf::Vector2f    _position;
-        bool            _update;
+        bool            _ready; // can be status in the future
     
     public:
 
@@ -44,12 +44,14 @@ class ClientServer{
         int             get_skin_id() const;
         int             get_score() const;
         sf::Vector2f    get_position() const;
+        bool            get_ready() const;
 
         void            set_unique_id(std::string const &);
         void            set_name(std::string const &);
         void            set_skin_id(int const &);
         void            set_score(int const &);
         void            set_position(sf::Vector2f const &);
+        void            set_ready(bool const &);
 };
 
 std::ostream &  operator<<( std::ostream & o, ClientServer & i );

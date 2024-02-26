@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 19:44:49 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/17 14:51:06 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/26 15:54:42 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Client::Client()
     _score = 0;
     _position.x = 0;
     _position.y = 0;
-    _update = false;
+    _ready = false;
 
     key_up = false;
     key_down = false;
@@ -37,7 +37,7 @@ Client::~Client()
 sf::Packet  Client::get_player_info()
 {
     sf::Packet packet;
-    packet << _unique_id << _name << _skin_id << _score << _position.x << _position.y << _update;
+    packet << _unique_id << _name << _skin_id << _score << _position.x << _position.y << _ready;
     return (packet);
 }
 
@@ -50,7 +50,7 @@ sf::Packet  Client::get_player_pos_packet()
 
 void        Client::set_player_info(sf::Packet packet_from_server)
 {
-    packet_from_server >> _unique_id >> _name >> _skin_id >> _score >> _position.x >> _position.y >> _update;
+    packet_from_server >> _unique_id >> _name >> _skin_id >> _score >> _position.x >> _position.y >> _ready;
     // checar valores e indicar possiveis erros;
 }
 
@@ -107,6 +107,10 @@ sf::Vector2f    Client::get_position() const
 {
     return (this->_position);
 }
+bool            Client::get_ready() const
+{
+    return (this->_ready);
+}
 
 void            Client::set_unique_id(std::string const &new_id)
 {
@@ -128,6 +132,10 @@ void            Client::set_position(sf::Vector2f const &new_position)
 {
     this->_position = new_position;
 }
+void            Client::set_ready(bool const &new_status)
+{
+    this->_ready = new_status;
+}
 
 std::ostream &  operator<<( std::ostream & o, Client & i )
 {
@@ -135,7 +143,8 @@ std::ostream &  operator<<( std::ostream & o, Client & i )
 	o << "Player Name: " << i.get_name() << std::endl;
 	o << "Skin Id: " << i.get_skin_id() << std::endl;
 	o << "Score: " << i.get_score() << std::endl;
-	o << "Position: x -> " << i.get_position().x << " | y -> " << i.get_position().y;
+	o << "Position: x -> " << i.get_position().x << " | y -> " << i.get_position().y << std::endl;
+	o << "Ready: " << i.get_ready();
     
 	return o;
 }

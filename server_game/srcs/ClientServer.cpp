@@ -25,7 +25,7 @@ ClientServer::~ClientServer()
 sf::Packet  ClientServer::get_player_info()
 {
     sf::Packet packet;
-    packet << _unique_id << _name << _skin_id << _score << _position.x << _position.y << _update;
+    packet << _unique_id << _name << _skin_id << _score << _position.x << _position.y << _ready;
     return (packet);
 }
 
@@ -38,7 +38,7 @@ sf::Packet  ClientServer::get_player_pos_packet()
 
 void        ClientServer::set_player_info(sf::Packet packet_from_server)
 {
-    packet_from_server >> _unique_id >> _name >> _skin_id >> _score >> _position.x >> _position.y >> _update;
+    packet_from_server >> _unique_id >> _name >> _skin_id >> _score >> _position.x >> _position.y >> _ready;
     // checar valores e indicar possiveis erros;
 }
 
@@ -64,6 +64,10 @@ sf::Vector2f    ClientServer::get_position() const
 {
     return (this->_position);
 }
+bool            ClientServer::get_ready() const
+{
+    return (this->_ready);
+}
 
 void            ClientServer::set_unique_id(std::string const &new_id)
 {
@@ -85,6 +89,10 @@ void            ClientServer::set_position(sf::Vector2f const &new_position)
 {
     this->_position = new_position;
 }
+void            ClientServer::set_ready(bool const &new_status)
+{
+    this->_ready = new_status;
+}
 
 std::ostream &  operator<<( std::ostream & o, ClientServer & i )
 {
@@ -92,7 +100,8 @@ std::ostream &  operator<<( std::ostream & o, ClientServer & i )
 	o << "Player Name: " << i.get_name() << std::endl;
 	o << "Skin Id: " << i.get_skin_id() << std::endl;
 	o << "Score: " << i.get_score() << std::endl;
-	o << "Position: x -> " << i.get_position().x << " | y -> " << i.get_position().y;
+	o << "Position: x -> " << i.get_position().x << " | y -> " << i.get_position().y << std::endl;
+    o << "Ready: " << i.get_ready();
     
 	return o;
 }
