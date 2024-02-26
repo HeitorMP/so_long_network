@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:02:50 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/11 22:28:10 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:32:20 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,8 @@
 # include <fstream>
 # include <unistd.h>
 # include <cstring>
+# include <thread>
+# include <mutex>
+# include <signal.h>
 # include <SFML/Graphics.hpp>
 # include <SFML/Network.hpp>

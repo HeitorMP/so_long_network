@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 14:20:47 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/16 11:05:41 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:34:09 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int main(int argc, char const *argv[])
     }
 
     sf::RenderWindow    Window(sf::VideoMode(800, 600, 32), "So Long");
+    Window.setFramerateLimit(100);
     std::vector<sf::Text> chat;
 
     // send client info to game server
@@ -54,6 +55,7 @@ int main(int argc, char const *argv[])
     self.set_player_info(game_first_receive);
     std::cout << self << std::endl; // should print the client with unique id
     self.apply_skin();
+    tmp_enemy.apply_skin();
 
     //send the name to chat server
     sf::Packet chat_packet;
@@ -163,30 +165,24 @@ int main(int argc, char const *argv[])
 
         Window.clear();
 
-        
         if (window_focus)
+        {
             self.movePlayer(); // move o player quando janela esta em foco apenas.
-        self.update();
+            self.update();
+        }
         Window.setView(gameView); // seleciona a tela do game
         pf.drawPlayfield(Window);
-        Window.draw(self.sp1);
         
         sf::Packet  send_my_position, request_received;
-        send_my_position = self.get_player_info();
+        send_my_position = self.get_player_pos_packet();
         game_socket.send(send_my_position);
         // receber dados do servidor
-        for (int enemy = 0; enemy < 1; enemy++)
-        {
-            if (game_socket.receive(request_received) == sf::Socket::Done)
-            {   
-                request_received >> tmp_enemy._position.x >> tmp_enemy._position.y;
-                tmp_enemy.apply_skin();
-                tmp_enemy.update();
-            }
+
+        if (game_socket.receive(request_received) == sf::Socket::Done)
+        {   
+            request_received >> tmp_enemy._position.x >> tmp_enemy._position.y;
+            tmp_enemy.update();
         }
-        // printar inimigos
-        Window.draw(tmp_enemy.sp1);
-      
 
         if(chat_is_on)
         {
@@ -212,6 +208,9 @@ int main(int argc, char const *argv[])
             drawText.setPosition(0, i * FONT_SIZE);
             Window.draw(drawText);
         }
+
+        Window.draw(self.sp1);
+        Window.draw(tmp_enemy.sp1);
         Window.display();
     }
 

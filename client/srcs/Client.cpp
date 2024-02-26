@@ -6,7 +6,7 @@
 /*   By: hmaciel- <hmaciel-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 19:44:49 by hmaciel-          #+#    #+#             */
-/*   Updated: 2024/02/16 11:06:25 by hmaciel-         ###   ########.fr       */
+/*   Updated: 2024/02/17 14:51:06 by hmaciel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ void        Client::set_player_info(sf::Packet packet_from_server)
 void        Client::movePlayer()
 {
     if (key_up)
-        _position.y -= 0.1;
+        _position.y -= 1.0;
     if (key_down)
-        _position.y += 0.1;
+        _position.y += 1.0;
     if (key_left)
-        _position.x -= 0.1;
+        _position.x -= 1.0;
     if (key_right)
-        _position.x += 0.1;
+        _position.x += 1.0;
 }
 
 void    Client::update()
